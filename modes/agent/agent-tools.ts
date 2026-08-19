@@ -22,7 +22,7 @@ export function createAgentTools(executor:ToolExecutor){
             path:z.string(),
             content:z.string(),
            }),
-           execute:async({path:p, content})=>executor.createFile(p,content);
+           execute:async({path:p, content})=>executor.createFile(p,content)
         }),
 
          modify_file:tool({
