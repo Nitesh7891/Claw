@@ -3,11 +3,11 @@ import { isMutationType } from './types'
 
 export class ActionTracker{
     private actions:ActionLog[]=[];
-  log(entry:Omit<ActionLog,'id' | 'timestamp'> &{
+  log(entry:Omit<ActionLog,'id' | 'timestamp'> & {
     id?:string;
     timestamp?:Date;
   },
-):ActionLog{
+  ):ActionLog{
      const action:ActionLog={
           id:entry.id ?? `action_${this.actions.length}`,
           timestamp:entry.timestamp?? new Date(),
@@ -17,11 +17,12 @@ export class ActionTracker{
           status:entry.status,
           userApproved:entry.userApproved
      }
+     return action;
   }
 
 
   getActions():readonly ActionLog[] {
-    return this.actions
+    return this.actions;
   }
 
   getPendingMutations():ActionLog[]{
