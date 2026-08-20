@@ -21,7 +21,7 @@ export async function runCliMode(){
 
         //Agent mode
         if(mode==='agent'){
-           runAgentMode();
+          await runAgentMode();
         } 
         if(mode==='ask'){
           runAskMode();

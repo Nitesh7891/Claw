@@ -6,13 +6,14 @@ import { ToolExecutor } from "./tool-executor";
 import { createAgentTools } from "./agent-tools";
 import { stepCountIs, ToolLoopAgent } from "ai";
 import { getAgentModel } from "../../ai";
+import { renderTerminalMarkdown } from "../../tui/terminal-md";
 
 export async function runAgentMode() {
-  console.log(chalk.bold("\n Agent Mode \n"));
+    console.log(chalk.bold("\n🤖 Agent Mode\n"));
 
   const goal = await text({
     message: "What would you like the agent to do?",
-    placeholder: "Concrete task for this codebase",
+    placeholder: "Concrete task for this codebase…",
   });
 
   if (isCancel(goal) || !goal.trim()) return;
@@ -34,17 +35,18 @@ export async function runAgentMode() {
 
 
   const result = await agent.generate({
-   prompt:goal.trim(),
-   onStepFinish:({toolCalls})=>{
-      for(const tc of toolCalls){
-         const preview = JSON.stringify(tc.input).slice(0,160);
-         console.log(chalk.green('✓'),
-      chalk.bold(String(tc.toolName)),
-      chalk.dim(preview + (preview.length >= 160 ? "...":""))
-   )
+    prompt: goal.trim(),
+    onStepFinish: ({ toolCalls }) => {
+      for (const tc of toolCalls) {
+        const preview = JSON.stringify(tc.input).slice(0, 160);
+        console.log(
+          chalk.green("  ✓"),
+          chalk.bold(String(tc.toolName)),
+          chalk.dim(preview + (preview.length >= 160 ? "..." : "")),
+        );
       }
-   }
+    },
   });
 
-  if(result.text?.trim()) console.log(result.text);
+  if (result.text?.trim()) console.log(renderTerminalMarkdown(result.text));
 }
